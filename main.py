@@ -6,7 +6,7 @@ import streamlit as st
 
 load_dotenv()
 
-
+# OPENAI_API_KEY
 TITLE = os.getenv("TITLE")
 SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT")
 MODEL = os.getenv("MODEL")
