@@ -1,0 +1,50 @@
+default_language_version:
+  python: python3.13
+fail_fast: true
+repos:
+  # Keep ruff checks first
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.5
+    hooks:
+      - id: ruff-check
+        types_or: [python, pyi, jupyter]
+        args: ["--fix", "--unsafe-fixes"]
+        exclude: __init__.py$
+      - id: ruff-format
+        args: ["."]
+        types_or: [python, pyi, jupyter]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        args: [ --allow-multiple-documents, --unsafe ] # required to allow mkdocs plugins syntax (double exclamation mark "!!")
+      - id: check-json
+        exclude: '^\.vscode'
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args:
+        - "--fix=lf"
+      - id: pretty-format-json
+        args:
+         - "--autofix"
+         - "--indent=4"
+         - "--no-sort-keys"
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.11.0
+    hooks:
+      - id: shellcheck
+        args: [ "--severity=warning" ]
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.14.0
+    hooks:
+      - id: hadolint-docker
+        args: [ --ignore, DL3059, --ignore, DL3013, --ignore, DL3008, --ignore, DL3009, --ignore, DL4006, --ignore, SC2155 ]
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.15.0
+    hooks:
+      - id: pretty-format-toml
+        args: [ --autofix ]

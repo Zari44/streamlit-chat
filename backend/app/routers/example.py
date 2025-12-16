@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter
 
 from app.models.example import ExampleRequest, ExampleResponse

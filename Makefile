@@ -115,7 +115,7 @@ dc_frontend:
 # 	$(MAKE) local_postgres
 
 type_check:
-	uv run ty check src/
+	uv run ty check .
 
 # Testing:
 #

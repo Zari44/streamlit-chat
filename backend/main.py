@@ -2,9 +2,7 @@ from app.routers import api_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(
-    title="GoatBot API", description="FastAPI backend for GoatBot", version="1.0.0"
-)
+app = FastAPI(title="GoatBot API", description="FastAPI backend for GoatBot", version="1.0.0")
 
 # CORS middleware
 app.add_middleware(
