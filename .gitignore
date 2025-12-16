@@ -1,5 +1,9 @@
 .venv
 .env
-__pycachi__/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
 uv.lock
 .python-version

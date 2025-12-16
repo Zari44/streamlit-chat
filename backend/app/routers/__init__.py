@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.routers import example, health
+from backend.app.routers import example, health
 
 api_router = APIRouter()
 

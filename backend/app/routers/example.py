@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.models.example import ExampleRequest, ExampleResponse
+from backend.app.models.example import ExampleRequest, ExampleResponse
 
 router = APIRouter()
 

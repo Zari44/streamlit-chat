@@ -8,9 +8,18 @@ upgrade_packages: # this upgrades the packages and installs them
 	uv lock --upgrade
 	uv sync --all-packages
 
+
+
+# Server commands
+server: # start FastAPI server
+	uv run uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+chat: # start Streamlit chat app
+	uv run streamlit run streamlit-chat/main.py
+
 # executing pre-commit multiple times as sometimes one execution is not enough to format everything correctly
 formatting:
-	for i in 1 2 3 4 5; do SKIP=mypy pre-commit run --all-files && break; done
+	for i in 1 2 3 4 5; do pre-commit run --all-files && break; done
 	make type_check
 
 # dev_server:
@@ -34,18 +43,8 @@ formatting:
 # 	streamlit run src/gapp/gapp/main.py --server.headless true
 
 
-dc: # run all
-	docker compose up --build
-
-dc_app:
-	docker compose up --build frontend backend
-
-dc_ginpipe:
-	docker compose up --build ginpipe
 
 
-dc_frontend:
-	docker compose up --build yolo-frontend
 
 
 
