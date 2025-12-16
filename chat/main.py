@@ -1,8 +1,8 @@
 import os
+
+import streamlit as st
 from dotenv import load_dotenv
 from openai import OpenAI
-import streamlit as st
-
 
 load_dotenv()
 
@@ -19,15 +19,15 @@ st.title(TITLE)
 
 def check_password():
     """Returns True if the user has entered the correct password."""
-    
+
     # Check if already authenticated
     if st.session_state.get("password_correct", False):
         return True
-    
+
     # Show password input
     st.title("🔒 Login")
     password = st.text_input("Enter password:", type="password", key="password_input")
-    
+
     if st.button("Login"):
         # Replace "your_password" with your actual password
         if password == PASSWORD:
@@ -35,8 +35,9 @@ def check_password():
             st.rerun()
         else:
             st.error("❌ Incorrect password")
-    
+
     return False
+
 
 # Check password before showing the app
 if not check_password():
@@ -48,7 +49,7 @@ if "openai_model" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.messages.append({"role": "system", "content": SYSTEM_PROMPT})
-    
+
 for i, message in enumerate(st.session_state.messages):
     if i == 0:  # Skip first message
         continue
@@ -70,7 +71,7 @@ if prompt := st.chat_input("Co słychać?"):
             ],
             stream=True,
         )
-       
+
         response = st.write_stream(stream)
-    
+
     st.session_state.messages.append({"role": "assistant", "content": response})

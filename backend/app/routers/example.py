@@ -1,11 +1,12 @@
+
 from fastapi import APIRouter
-from typing import List
-from app.models.example import ExampleResponse, ExampleRequest
+
+from app.models.example import ExampleRequest, ExampleResponse
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[ExampleResponse])
+@router.get("/", response_model=list[ExampleResponse])
 async def get_examples():
     """Get all examples"""
     return [
@@ -18,11 +19,7 @@ async def get_examples():
 async def create_example(example: ExampleRequest):
     """Create a new example"""
     # This is a placeholder - implement your logic here
-    return ExampleResponse(
-        id=1,
-        name=example.name,
-        description=example.description
-    )
+    return ExampleResponse(id=1, name=example.name, description=example.description)
 
 
 @router.get("/{example_id}", response_model=ExampleResponse)
@@ -31,6 +28,5 @@ async def get_example(example_id: int):
     return ExampleResponse(
         id=example_id,
         name=f"Example {example_id}",
-        description=f"Description for example {example_id}"
+        description=f"Description for example {example_id}",
     )
-
