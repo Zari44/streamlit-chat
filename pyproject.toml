@@ -20,12 +20,15 @@ requires-python = ">=3.12"
 version = "0.1.0"
 
 [tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
 ignore = [
   "E501",  # line too long, handled by ruff format
   "B008",  # do not perform function calls in argument defaults
   "C901"  # too complex
 ]
-line-length = 120
 select = [
   "E",  # pycodestyle errors
   "W",  # pycodestyle warnings
@@ -35,7 +38,7 @@ select = [
   "C4",  # flake8-comprehensions
   "UP"  # pyupgrade
 ]
-target-version = "py312"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
+"streamlit-chat/config.py" = ["E402"]  # import after sys.path modification is intentional

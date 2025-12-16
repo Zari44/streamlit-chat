@@ -19,7 +19,7 @@ chat: # start Streamlit chat app
 
 # executing pre-commit multiple times as sometimes one execution is not enough to format everything correctly
 formatting:
-	for i in 1 2 3 4 5; do pre-commit run --all-files && break; done
+	for i in 1 2 3 4 5; do uv run pre-commit run --all-files && break; done
 	make type_check
 
 # dev_server:
