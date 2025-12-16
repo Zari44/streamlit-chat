@@ -1,6 +1,5 @@
 import json
 import sqlite3
-import uuid
 
 DB_PATH = "chat_sessions.db"
 
@@ -17,21 +16,23 @@ def init_db():
 
 
 def create_session(config: dict) -> str:
-    """Saves config and returns a session ID"""
-    session_id = str(uuid.uuid4())
+    """Saves config and returns the domain"""
+    domain = config.get("domain")
+    if not domain:
+        raise ValueError("Domain is required")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("INSERT INTO sessions (id, config) VALUES (?, ?)", (session_id, json.dumps(config)))
+    c.execute("INSERT OR REPLACE INTO sessions (id, config) VALUES (?, ?)", (domain, json.dumps(config)))
     conn.commit()
     conn.close()
-    return session_id
+    return domain
 
 
-def get_session(session_id: str) -> dict:
-    """Retrieves config by session ID"""
+def get_session(domain: str) -> dict:
+    """Retrieves config by domain"""
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT config FROM sessions WHERE id = ?", (session_id,))
+    c.execute("SELECT config FROM sessions WHERE id = ?", (domain,))
     row = c.fetchone()
     conn.close()
     if row:

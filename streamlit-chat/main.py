@@ -10,9 +10,9 @@ load_dotenv()
 
 MODEL = os.getenv("MODEL", "gpt-4o-mini")
 
-session_id = st.query_params.get("id")
+domain = st.query_params.get("domain")
 
-config = get_config(session_id)
+config = get_config(domain)
 client = OpenAI()
 
 st.title(config["title"])

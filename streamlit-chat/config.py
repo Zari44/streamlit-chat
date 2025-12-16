@@ -19,15 +19,15 @@ SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT", "You are a helpful assistant.")
 PASSWORD = os.getenv("PASSWORD", "password")
 
 
-def get_config(session_id: str | None) -> dict[str, str]:
-    if not session_id:
+def get_config(domain: str | None) -> dict[str, str]:
+    if not domain:
         return {
             "title": os.getenv("TITLE", TITLE),
             "system_prompt": SYSTEM_PROMPT,
             "password": PASSWORD,
         }
 
-    loaded_config = get_session(session_id)
+    loaded_config = get_session(domain)
     if loaded_config:
         return loaded_config
     else:

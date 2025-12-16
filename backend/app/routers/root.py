@@ -19,6 +19,9 @@ async def root():
         <div class="container">
             <h1>GoatBot Form</h1>
             <form id="dataForm">
+                <label for="domain">Domain:</label>
+                <input type="text" id="domain" name="domain" required>
+
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title" required>
 
@@ -38,6 +41,7 @@ async def root():
                 e.preventDefault();
 
                 const formData = {
+                    domain: document.getElementById('domain').value,
                     title: document.getElementById('title').value,
                     system_prompt: document.getElementById('system_prompt').value,
                     password: document.getElementById('password').value || null
