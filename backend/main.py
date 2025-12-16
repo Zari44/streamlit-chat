@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.routers import api_router
+from backend.app.db.db import init_db
+from backend.app.routers import api_router, root
 
 app = FastAPI(title="GoatBot API", description="FastAPI backend for GoatBot", version="1.0.0")
+init_db()
 
 # CORS middleware
 app.add_middleware(
@@ -16,15 +18,4 @@ app.add_middleware(
 
 # Include routers
 app.include_router(api_router, prefix="/api")
-
-
-@app.get("/")
-async def root():
-    """Root endpoint"""
-    return {"message": "Welcome to GoatBot API", "status": "running"}
-
-
-@app.get("/health")
-async def health_check():
-    """Health check endpoint"""
-    return {"status": "healthy"}
+app.include_router(root.router)

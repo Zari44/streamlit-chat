@@ -6,10 +6,11 @@ from openai import OpenAI
 
 load_dotenv()
 
+MODEL = os.getenv("MODEL", "gpt-4o-mini")
+
 # OPENAI_API_KEY
 TITLE = os.getenv("TITLE")
 SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT")
-MODEL = os.getenv("MODEL")
 PASSWORD = os.getenv("PASSWORD")
 
 client = OpenAI()
@@ -44,7 +45,7 @@ if not check_password():
     st.stop()
 
 if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-4o-mini"
+    st.session_state["openai_model"] = MODEL
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
