@@ -6,7 +6,7 @@ app = FastAPI(title="GoatBot API", description="FastAPI backend for GoatBot", ve
 
 # CORS middleware
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,  # type: ignore[invalid-argument-type]
     allow_origins=["*"],  # Configure this appropriately for production
     allow_credentials=True,
     allow_methods=["*"],
