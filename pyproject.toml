@@ -1,3 +1,16 @@
+[project]
+name = "goatbot"
+version = "0.1.0"
+description = "Goatbot project"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+dev-dependencies = [
+    "mypy",
+    "ruff",
+]
+
 [tool.mypy]
 python_version = "3.11"
 warn_return_any = true

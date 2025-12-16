@@ -1,3 +1,5 @@
 .venv
 .env
 __pycachi__/
+uv.lock
+.python-version

@@ -2,7 +2,7 @@
 
 # Default Python version
 PYTHON := python3
-PIP := pip3
+UV := uv
 
 # Directories
 BACKEND_DIR := backend
@@ -14,8 +14,19 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 install-dev: ## Install development dependencies
-	$(PIP) install mypy ruff
+	$(UV) sync --dev
 	@echo "Development dependencies installed"
+
+install-backend: ## Install backend dependencies
+	$(UV) pip install -r $(BACKEND_DIR)/requirements.txt
+	@echo "Backend dependencies installed"
+
+install-chat: ## Install chat dependencies
+	$(UV) pip install -r $(CHAT_DIR)/requirements.txt
+	@echo "Chat dependencies installed"
+
+install: install-dev install-backend install-chat ## Install all dependencies
+	@echo "All dependencies installed"
 
 format: ## Format code with ruff
 	@echo "Formatting code with ruff..."
