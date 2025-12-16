@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.db.db import init_db
 from backend.app.routers import api_router, root
+from shared.db import init_db
 
 app = FastAPI(title="GoatBot API", description="FastAPI backend for GoatBot", version="1.0.0")
 init_db()

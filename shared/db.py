@@ -6,6 +6,7 @@ DB_PATH = "chat_sessions.db"
 
 
 def init_db():
+    """Initialize the database and create tables if they don't exist"""
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     # Create table if not exists
