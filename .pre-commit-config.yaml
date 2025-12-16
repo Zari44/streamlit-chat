@@ -33,6 +33,7 @@ repos:
          - "--autofix"
          - "--indent=4"
          - "--no-sort-keys"
+        exclude: '^\.vscode/'
   - repo: https://github.com/koalaman/shellcheck-precommit
     rev: v0.11.0
     hooks:

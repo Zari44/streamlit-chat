@@ -1,0 +1,74 @@
+{
+    "makefile.configureOnOpen": false,
+    // ----------------------------------
+    // ------- settings.json file -------
+    // ----------------------------------
+
+    // THEME
+    // for the "JetBrains Darcula Theme"
+    // dowload from: https://www.jetbrains.com/lp/mono/
+    // install as in here: https://support.apple.com/en-il/guide/font-book/fntbk1000/mac#:~:text=Do%20any%20of%20the%20following,in%20the%20dialog%20that%20appears.
+
+    "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace",
+    "editor.lineHeight": 22,
+    "editor.fontWeight": "300",
+    "editor.semanticHighlighting.enabled": true,
+    "workbench.colorTheme": "JetBrains Darcula Theme",
+    "workbench.iconTheme": "eq-material-theme-icons",
+    "editor.fontSize": 14,
+    "workbench.colorCustomizations": { // so I can easly see what I am searching for in the terminal
+    "terminal.findMatchBackground": "#d6bd00",
+    "terminal.findMatchBorder": "#d6bd00",
+    "terminal.findMatchHighlightBackground": "#d6bd00",
+    "terminal.findMatchHighlightBorder": "#d6bd00",
+    "terminalOverviewRuler.findMatchForeground": "#d6bd00",
+
+
+
+    // PYTHON
+  // indexes all libs up to 5 depth. ref: https://github.com/microsoft/pylance-release/issues/3678
+  // if still not finding, try either greater depth
+  // or python.analysis.userFileIndexingLimit = -1 (default is 2000 files,
+  // however I'm not sure if it's only for user files or it's also a limit for installed packages)
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "",
+      "depth": 10,
+      "includeAllSymbols": true
+    }
+  ],
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.importFormat": "absolute",
+  // "python.analysis.userFileIndexingLimit": -1,
+  "python.analysis.indexing": true,
+  // "python.analysis.autoSearchPaths": true,
+  // "python.analysis.typeCheckingMode": "strict",
+  "python.analysis.typeCheckingMode": "standard",
+  "python.analysis.autoFormatStrings": true,  // When typing "{" inside a string, whether to automatically prefix it with an "f".
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  // "python.analysis.inlayHints.callArgumentNames": "all",
+  "python.analysis.inlayHints.callArgumentNames": "partial",
+  "python.analysis.inlayHints.pytestParameters": true,
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  // check my .zshrc to see if I am alredy sourcing the venv for new terminals
+  // righ now, I am only doing it for "cd <folder>" hook
+  "python.terminal.activateEnvironment":true,
+  // "python.terminal.activateEnvInCurrentTerminal": false,
+  // for Python Type Hint extension:
+  // "workspace.searchEnabled": false,
+  "python.envFile": "", // turned off because, vscode python env file loader fails for multi lines env variables
+
+
+  // OTHER
+  "cursor.diffs.useCharacterLevelDiffs": true,
+  "cursor.cpp.disabledLanguages": [
+      "plaintext"
+  ],
+  "cSpell.userWords": [
+      "uvicorn"
+  ],
+  "cursor.composer.shouldAllowCustomModes": true,
+  "cursor.composer.textSizeScale": 1.15,
+  "gitlens.mode.active": "zen"
+}
