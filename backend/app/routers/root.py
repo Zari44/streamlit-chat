@@ -65,8 +65,12 @@ async def root():
 
                     if (response.ok) {
                         responseDiv.className = 'success';
-                        responseDiv.textContent = 'Success! Data submitted: ' + JSON.stringify(data, null, 2);
+                        responseDiv.textContent = 'Success! Redirecting to chat...';
                         document.getElementById('dataForm').reset();
+                        // Redirect to the chat URL
+                        if (data.url) {
+                            window.location.href = data.url;
+                        }
                     } else {
                         responseDiv.className = 'error';
                         responseDiv.textContent = 'Error: ' + (data.detail || 'Failed to submit data');
