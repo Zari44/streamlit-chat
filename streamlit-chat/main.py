@@ -24,10 +24,12 @@ MODEL = os.getenv("MODEL", "gpt-4o-mini")
 logger.info(f"Line 20: MODEL set to {MODEL}")
 
 domain = st.query_params.get("domain")
+logger.info(f"Line 22: Query params: {dict(st.query_params)}")
 logger.info(f"Line 22: Domain from query params: {domain}")
 if not domain:
     # Access headers via Streamlit's experimental API
     headers = st.context.headers
+    logger.info(f"Line 30: Headers: {dict(headers)}")
     domain = headers.get("X-Chat-Domain") or headers.get("x-chat-domain")
     logger.info(f"Line 35: Domain from headers params: {domain}")
 

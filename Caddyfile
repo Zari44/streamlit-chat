@@ -2,16 +2,25 @@
 	debug
 }
 
-localhost {
-    handle_path /chats/* {
-        reverse_proxy streamlit-chat:8501
+*.goatbot.localhost {
+    # 1. Add the subdomain as a query parameter (e.g. ?tenant=alice)
+    # {path} preserves the original path
+    # {query} preserves any existing query parameters
+    # {labels.2} is the wildcard match (the subdomain)
+    reverse_proxy streamlit-chat:8501 {
+        # Inject the subdomain (aaa) into a custom header named X-Domain
+        header_up X-Chat-Domain {labels.2}
     }
+}
 
-    handle_path /api/* {
+
+goatbot.localhost {
+
+    handle /api/* {
         reverse_proxy backend:8000
     }
 
-    handle_path {
+    handle {
         reverse_proxy backend:8000
     }
 }

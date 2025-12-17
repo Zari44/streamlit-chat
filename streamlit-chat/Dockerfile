@@ -22,4 +22,5 @@ RUN uv sync --frozen --no-dev
 EXPOSE 8501
 
 # Run the application with hot reload
+# baseUrlPath is required so Streamlit generates correct URLs when behind /chats/ proxy
 CMD ["uv", "run", "streamlit", "run", "streamlit-chat/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
