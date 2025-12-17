@@ -1,0 +1,17 @@
+{
+	debug
+}
+
+localhost {
+    handle_path /chats/* {
+        reverse_proxy streamlit-chat:8501
+    }
+
+    handle_path /api/* {
+        reverse_proxy backend:8000
+    }
+
+    handle_path {
+        reverse_proxy backend:8000
+    }
+}

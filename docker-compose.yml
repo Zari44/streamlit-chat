@@ -11,7 +11,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
-    command: caddy run --config /etc/caddy/Caddyfile
+    command: caddy run --config /etc/caddy/Caddyfile --watch
     networks:
       - goatbot-network
     restart: unless-stopped
@@ -28,6 +28,10 @@ services:
       - STREAMLIT_URL=http://streamlit-chat:8501
     volumes:
       - ./chat_sessions.db:/app/chat_sessions.db
+      - ./backend:/app/backend
+      - ./shared:/app/shared
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./uv.lock:/app/uv.lock
     networks:
       - goatbot-network
     restart: unless-stopped
@@ -39,6 +43,10 @@ services:
     container_name: goatbot-streamlit
     volumes:
       - ./chat_sessions.db:/app/chat_sessions.db
+      - ./streamlit-chat:/app/streamlit-chat
+      - ./shared:/app/shared
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./uv.lock:/app/uv.lock
     networks:
       - goatbot-network
     restart: unless-stopped

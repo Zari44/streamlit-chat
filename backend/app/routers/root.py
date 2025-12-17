@@ -31,6 +31,11 @@ async def root():
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password">
 
+                <label for="password_confirm">Confirm Password:</label>
+                <input type="password" id="password_confirm" name="password_confirm">
+
+                <div id="passwordError" style="color: red; display: none; margin-bottom: 10px;"></div>
+
                 <button type="submit">Submit</button>
             </form>
             <div id="response"></div>
@@ -40,11 +45,25 @@ async def root():
             document.getElementById('dataForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
+                const password = document.getElementById('password').value;
+                const passwordConfirm = document.getElementById('password_confirm').value;
+                const passwordError = document.getElementById('passwordError');
+
+                // Check if passwords match (only if password is provided)
+                if (password && password !== passwordConfirm) {
+                    passwordError.textContent = 'Passwords do not match!';
+                    passwordError.style.display = 'block';
+                    return;
+                }
+
+                // Clear error if passwords match
+                passwordError.style.display = 'none';
+
                 const formData = {
                     domain: document.getElementById('domain').value,
                     title: document.getElementById('title').value,
                     system_prompt: document.getElementById('system_prompt').value,
-                    password: document.getElementById('password').value || null
+                    password: password || null
                 };
 
                 const responseDiv = document.getElementById('response');
@@ -64,13 +83,15 @@ async def root():
                     const data = await response.json();
 
                     if (response.ok) {
-                        responseDiv.className = 'success';
-                        responseDiv.textContent = 'Success! Redirecting to chat...';
-                        document.getElementById('dataForm').reset();
-                        // Redirect to the chat URL
-                        if (data.url) {
-                            window.location.href = data.url;
+                        // Redirect immediately if redirect_url is present
+                        if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                            return; // Exit early to prevent further execution
                         }
+                        // Fallback: show success message if no redirect_url
+                        responseDiv.className = 'success';
+                        responseDiv.textContent = 'Success! ' + (data.message || 'Chat created');
+                        document.getElementById('dataForm').reset();
                     } else {
                         responseDiv.className = 'error';
                         responseDiv.textContent = 'Error: ' + (data.detail || 'Failed to submit data');

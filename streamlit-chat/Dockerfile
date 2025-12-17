@@ -21,5 +21,5 @@ RUN uv sync --frozen --no-dev
 # Expose port
 EXPOSE 8501
 
-# Run the application
+# Run the application with hot reload
 CMD ["uv", "run", "streamlit", "run", "streamlit-chat/main.py", "--server.port=8501", "--server.address=0.0.0.0"]

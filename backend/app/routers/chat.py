@@ -13,11 +13,5 @@ STREAMLIT_URL = os.getenv("STREAMLIT_URL", "http://localhost:8501")
 
 @router.post("/start")
 def start_chat(config: ChatConfig):
-    # 1. Save the config to DB
-
     domain = create_session(config.model_dump())
-    # 2. Return the link to Streamlit
-    # Assuming Streamlit runs on port 8501
-    chat_url = f"{STREAMLIT_URL}/?domain={domain}"
-
-    return {"message": "Session created", "domain": domain, "url": chat_url}
+    return {"message": "New chatbot created", "domain": domain, "redirect_url": f"/chats/{domain}"}

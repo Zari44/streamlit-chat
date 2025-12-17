@@ -1,11 +1,9 @@
 from fastapi import APIRouter
 
-from backend.app.routers import example, health
-from backend.app.routers import chat
+from backend.app.routers import chat, health
 
-api_router = APIRouter()
+api_router = APIRouter(prefix="/api")
 
 # Include individual routers
-api_router.include_router(health.router, prefix="/health", tags=["health"])
-api_router.include_router(example.router, prefix="/example", tags=["example"])
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
+api_router.include_router(health.router, tags=["health"])
