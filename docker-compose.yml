@@ -1,15 +1,31 @@
 version: '3.8'
 
 services:
+  caddy:
+    image: caddy:latest
+    container_name: goatbot-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    command: caddy run --config /etc/caddy/Caddyfile
+    networks:
+      - goatbot-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - streamlit-chat
+
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
     container_name: goatbot-backend
-    ports:
-      - "8000:8000"
     environment:
-      - STREAMLIT_URL=http://localhost:8501
+      - STREAMLIT_URL=http://streamlit-chat:8501
     volumes:
       - ./chat_sessions.db:/app/chat_sessions.db
     networks:
@@ -21,8 +37,6 @@ services:
       context: .
       dockerfile: streamlit-chat/Dockerfile
     container_name: goatbot-streamlit
-    ports:
-      - "8501:8501"
     volumes:
       - ./chat_sessions.db:/app/chat_sessions.db
     networks:
@@ -34,3 +48,7 @@ services:
 networks:
   goatbot-network:
     driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
