@@ -47,7 +47,7 @@ async def get_token_payload(token: str) -> dict:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=f"Failed to fetch Auth0 JWKS: {str(e)}",
-        )
+        ) from e
 
     # Get the signing key
     unverified_header = jwt.get_unverified_header(token)
@@ -83,7 +83,7 @@ async def get_token_payload(token: str) -> dict:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Invalid token: {str(e)}",
-        )
+        ) from e
 
 
 async def get_current_user(

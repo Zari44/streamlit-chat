@@ -10,9 +10,7 @@ WORKDIR /app
 COPY uv.lock uv.lock
 COPY pyproject.toml pyproject.toml
 
-RUN uv sync \
-    --frozen \
-    --no-dev \
+RUN uv sync --frozen --no-dev
 
 # Copy shared directory (needed by backend)
 COPY shared/ ./shared/

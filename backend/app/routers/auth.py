@@ -1,6 +1,7 @@
 """Auth0 authentication router"""
 
 import secrets
+import traceback
 from urllib.parse import urlencode
 
 import httpx
@@ -10,16 +11,18 @@ from fastapi.responses import RedirectResponse
 from jose import jwt
 
 from backend.app.auth_config import (
-    AUTH0_BASE_URL,
     AUTH0_CALLBACK_URL,
     AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET,
     AUTH0_DOMAIN,
-    AUTH0_LOGOUT_URL,
     AUTH0_USERINFO_URL,
 )
+from shared.logger import get_logger
 
 router = APIRouter()
+
+
+logger = get_logger(__name__)
 
 
 def get_session_token(request: Request) -> str | None:
@@ -122,6 +125,7 @@ async def callback(request: Request, code: str, state: str | None = None):
                 httponly=True,
                 samesite="lax",
                 secure=False,  # Set to True in production with HTTPS
+                path="/",
                 max_age=3600 * 24,  # 24 hours
             )
             response.set_cookie(
@@ -130,6 +134,7 @@ async def callback(request: Request, code: str, state: str | None = None):
                 httponly=True,
                 samesite="lax",
                 secure=False,  # Set to True in production with HTTPS
+                path="/",
                 max_age=3600 * 24,  # 24 hours
             )
 
@@ -142,26 +147,21 @@ async def callback(request: Request, code: str, state: str | None = None):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Authentication failed: {str(e)}",
-            )
+            ) from e
 
 
 @router.get("/logout")
 async def logout(request: Request):
     """Logout user and clear session"""
-    # Build logout URL
-    return_url = f"http://{AUTH0_BASE_URL}/"
-    logout_params = {
-        "client_id": AUTH0_CLIENT_ID,
-        "returnTo": return_url,
-    }
-    logout_url = f"{AUTH0_LOGOUT_URL}?{urlencode(logout_params)}"
+    # Clear all session cookies and redirect to home
+    # This performs local logout. For Auth0 logout, configure the returnTo URL
+    # in Auth0 Dashboard -> Applications -> Allowed Logout URLs
+    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
 
-    # Create response
-    response = RedirectResponse(url=logout_url)
-
-    # Clear cookies
-    response.delete_cookie("session_token")
-    response.delete_cookie("access_token")
+    # Clear all session cookies
+    response.delete_cookie("session_token", path="/")
+    response.delete_cookie("access_token", path="/")
+    response.delete_cookie("auth_state", path="/")
 
     return response
 
@@ -183,7 +183,10 @@ async def get_current_user(request: Request):
             id_token,
             key=None,
             algorithms=["RS256"],
-            options={"verify_signature": False},  # Skip signature verification for now
+            options={
+                "verify_signature": False,  # Skip signature verification for now
+                "verify_aud": False,  # Skip audience validation
+            },
         )
         return {
             "sub": payload.get("sub"),
@@ -192,11 +195,12 @@ async def get_current_user(request: Request):
             "nickname": payload.get("nickname"),
             "picture": payload.get("picture"),
         }
-    except jwt.JWTError:
+    except jwt.JWTError as e:
+        logger.error(f"Line 206: JWTError: {traceback.format_exc()}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
-        )
+        ) from e
 
 
 def get_current_user_dependency(request: Request) -> dict:
@@ -213,7 +217,10 @@ def get_current_user_dependency(request: Request) -> dict:
             id_token,
             key=None,
             algorithms=["RS256"],
-            options={"verify_signature": False},  # Skip signature verification for now
+            options={
+                "verify_signature": False,  # Skip signature verification for now
+                "verify_aud": False,  # Skip audience validation
+            },
         )
         return {
             "sub": payload.get("sub"),
@@ -222,8 +229,8 @@ def get_current_user_dependency(request: Request) -> dict:
             "nickname": payload.get("nickname"),
             "picture": payload.get("picture"),
         }
-    except jwt.JWTError:
+    except jwt.JWTError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
-        )
+        ) from e

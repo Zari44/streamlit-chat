@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 
-def setup_logging(log_file: str = None, log_level: int = logging.INFO):
+def setup_logging(log_file: str | None = None, log_level: int = logging.INFO):
     """
     Configure logging for the application.
 
@@ -29,7 +29,7 @@ def setup_logging(log_file: str = None, log_level: int = logging.INFO):
     )
 
 
-def get_logger(name: str = None):
+def get_logger(name: str | None = None):
     """
     Get a logger instance.
 
@@ -43,8 +43,8 @@ def get_logger(name: str = None):
         import inspect
 
         # Get the name of the calling module
-        frame = inspect.currentframe().f_back
-        name = frame.f_globals.get("__name__", "unknown")
+        frame = inspect.currentframe().f_back  # type: ignore[possibly-missing-attribute]
+        name = frame.f_globals.get("__name__", "unknown")  # type: ignore[possibly-missing-attribute]
 
     return logging.getLogger(name)
 
