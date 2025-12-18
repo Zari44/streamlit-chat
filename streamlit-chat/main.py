@@ -7,13 +7,11 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from password import check_password
 
+from shared.logger import get_logger, setup_logging
+
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("streamlit_chat.log"), logging.StreamHandler()],
-)
-logger = logging.getLogger(__name__)
+setup_logging(log_file="streamlit_chat.log", log_level=logging.INFO)
+logger = get_logger(__name__)
 
 logger.info("=== Starting streamlit chat app ===")
 
