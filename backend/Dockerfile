@@ -7,16 +7,18 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 WORKDIR /app
 
 # Copy dependency files
-COPY pyproject.toml uv.lock ./
+COPY uv.lock uv.lock
+COPY pyproject.toml pyproject.toml
+
+RUN uv sync \
+    --frozen \
+    --no-dev \
 
 # Copy shared directory (needed by backend)
 COPY shared/ ./shared/
 
 # Copy backend directory
 COPY backend/ ./backend/
-
-# Install dependencies
-RUN uv sync --frozen --no-dev
 
 # Expose port
 EXPOSE 8000
