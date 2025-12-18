@@ -1,12 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 
 
 @router.get("/", response_class=HTMLResponse)
-async def root():
-    """Root endpoint that renders a simple form"""
+async def root(request: Request):
+    """Root endpoint that renders a simple form with Auth0 login/registration"""
     html_content = """
     <!DOCTYPE html>
     <html lang="en">
@@ -17,7 +17,14 @@ async def root():
     </head>
     <body>
         <div class="container">
+            <div class="auth-section">
+                <div id="authInfo" class="auth-info">
+                    <!-- Auth info will be populated by JavaScript -->
+                </div>
+            </div>
+
             <h1>GoatBot Form</h1>
+
             <form id="dataForm">
                 <label for="domain">Domain:</label>
                 <input type="text" id="domain" name="domain" required>
@@ -36,12 +43,67 @@ async def root():
 
                 <div id="passwordError" style="color: red; display: none; margin-bottom: 10px;"></div>
 
-                <button type="submit">Submit</button>
+                <button type="submit" class="btn-primary">Submit</button>
             </form>
             <div id="response"></div>
         </div>
 
         <script>
+            // Check authentication status on page load
+            async function checkAuth() {
+                try {
+                    const response = await fetch('/api/auth/me');
+                    if (response.ok) {
+                        const user = await response.json();
+                        displayAuthenticatedUser(user);
+                    } else {
+                        displayLoginPrompt();
+                    }
+                } catch (error) {
+                    displayLoginPrompt();
+                }
+            }
+
+            function displayAuthenticatedUser(user) {
+                const authInfo = document.getElementById('authInfo');
+                const initials = (user.name || user.email || 'U').substring(0, 2).toUpperCase();
+
+                authInfo.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${initials}</div>
+                        <div class="user-details">
+                            <div class="user-name">${user.name || user.nickname || user.email || 'User'}</div>
+                            <div class="user-email">${user.email || ''}</div>
+                        </div>
+                    </div>
+                    <div class="auth-buttons">
+                        <button class="btn-logout" onclick="logout()">Logout</button>
+                    </div>
+                `;
+            }
+
+            function displayLoginPrompt() {
+                const authInfo = document.getElementById('authInfo');
+                authInfo.innerHTML = `
+                    <div class="login-prompt" style="width: 100%;">
+                        <p>Please login or register to continue</p>
+                        <button class="btn-primary" onclick="login()">Login / Register</button>
+                    </div>
+                `;
+            }
+
+            function login() {
+                window.location.href = '/api/auth/login';
+            }
+
+            function logout() {
+                window.location.href = '/api/auth/logout';
+            }
+
+            // Check auth status on page load
+            checkAuth();
+
+            // Form submission handler
             document.getElementById('dataForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 

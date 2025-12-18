@@ -1,6 +1,3 @@
-{
-	debug
-}
 
 *.goatbot.localhost {
     # 1. Add the subdomain as a query parameter (e.g. ?tenant=alice)

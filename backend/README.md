@@ -9,12 +9,29 @@ FastAPI backend application for GoatBot.
 pip install -r requirements.txt
 ```
 
-2. Run the development server:
+2. Configure Auth0 environment variables:
+```bash
+export AUTH0_DOMAIN="your-tenant.auth0.com"
+export AUTH0_CLIENT_ID="your-client-id"
+export AUTH0_CLIENT_SECRET="your-client-secret"
+export AUTH0_BASE_URL="goatbot.localhost"  # or your domain
+export AUTH0_CALLBACK_URL="http://goatbot.localhost/api/auth/callback"  # optional, auto-generated if not set
+```
+
+3. Run the development server:
 ```bash
 uvicorn main:app --reload
 ```
 
 The API will be available at `http://localhost:8000`
+
+## Auth0 Setup
+
+1. Create an Auth0 account at https://auth0.com
+2. Create a new Application (Regular Web Application)
+3. Configure allowed callback URLs: `http://goatbot.localhost/api/auth/callback`
+4. Configure allowed logout URLs: `http://goatbot.localhost/`
+5. Set the environment variables above with your Auth0 credentials
 
 ## API Documentation
 
