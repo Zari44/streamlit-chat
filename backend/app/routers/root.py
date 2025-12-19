@@ -76,8 +76,18 @@ async def root(request: Request):
                 </div>
 
                 <div class="form-field">
-                    <label for="system_prompt">System Prompt:</label>
-                    <textarea id="system_prompt" name="system_prompt" required></textarea>
+                    <label for="bot_audience">For whom the bot is addressed:</label>
+                    <textarea id="bot_audience" name="bot_audience" required></textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="bot_aim">What is bot's aim / What should it do:</label>
+                    <textarea id="bot_aim" name="bot_aim" required></textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="bot_tone">What words should it use and what should be it's general tone:</label>
+                    <textarea id="bot_tone" name="bot_tone" required></textarea>
                 </div>
 
                 <div class="form-field">
@@ -100,17 +110,23 @@ async def root(request: Request):
         </div>
 
         <script>
+            // Store current user info
+            let currentUser = null;
+
             // Check authentication status on page load
             async function checkAuth() {
                 try {
                     const response = await fetch('/api/auth/me');
                     if (response.ok) {
                         const user = await response.json();
+                        currentUser = user;
                         displayAuthenticatedUser(user);
                     } else {
+                        currentUser = null;
                         displayLoginPrompt();
                     }
                 } catch (error) {
+                    currentUser = null;
                     displayLoginPrompt();
                 }
             }
@@ -173,10 +189,13 @@ async def root(request: Request):
                 passwordError.style.display = 'none';
 
                 const formData = {
+                    user: currentUser ? currentUser.email : null,
                     domain: document.getElementById('domain').value,
                     title: document.getElementById('title').value,
-                    system_prompt: document.getElementById('system_prompt').value,
-                    password: password || null
+                    bot_audience: document.getElementById('bot_audience').value,
+                    bot_aim: document.getElementById('bot_aim').value,
+                    bot_tone: document.getElementById('bot_tone').value,
+                    password: password || ''
                 };
 
                 const responseDiv = document.getElementById('response');

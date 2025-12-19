@@ -1,6 +1,8 @@
 import json
 import sqlite3
 
+from backend.app.models.chat_config import ChatConfig
+
 DB_PATH = "chat_sessions.db"
 
 
@@ -15,20 +17,20 @@ def init_db():
     conn.close()
 
 
-def create_session(config: dict) -> str:
+def create_session(config: ChatConfig) -> str:
     """Saves config and returns the domain"""
     domain = config.get("domain")
     if not domain:
         raise ValueError("Domain is required")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("INSERT OR REPLACE INTO sessions (id, config) VALUES (?, ?)", (domain, json.dumps(config)))
+    c.execute("INSERT OR REPLACE INTO sessions (id, config) VALUES (?, ?)", (config.domain, json.dumps(config)))
     conn.commit()
     conn.close()
     return domain
 
 
-def get_session(domain: str) -> dict:
+def get_session(domain: str) -> ChatConfig:
     """Retrieves config by domain"""
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -36,5 +38,5 @@ def get_session(domain: str) -> dict:
     row = c.fetchone()
     conn.close()
     if row:
-        return json.loads(row[0])
+        return ChatConfig(json.loads(row[0]))
     return {}
