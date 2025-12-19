@@ -14,6 +14,45 @@ async def root(request: Request):
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>GoatBot Form</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            label {
+                display: block;
+                font-size: 16px;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+            input[type="text"],
+            input[type="password"],
+            textarea {
+                display: block;
+                width: 100%;
+                padding: 12px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+            textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+            button {
+                padding: 12px 24px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
@@ -26,24 +65,36 @@ async def root(request: Request):
             <h1>GoatBot Form</h1>
 
             <form id="dataForm">
-                <label for="domain">Domain:</label>
-                <input type="text" id="domain" name="domain" required>
+                <div class="form-field">
+                    <label for="domain">Domain:</label>
+                    <input type="text" id="domain" name="domain" required>
+                </div>
 
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required>
+                <div class="form-field">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
 
-                <label for="system_prompt">System Prompt:</label>
-                <textarea id="system_prompt" name="system_prompt" required></textarea>
+                <div class="form-field">
+                    <label for="system_prompt">System Prompt:</label>
+                    <textarea id="system_prompt" name="system_prompt" required></textarea>
+                </div>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
+                <div class="form-field">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+                </div>
 
-                <label for="password_confirm">Confirm Password:</label>
-                <input type="password" id="password_confirm" name="password_confirm">
+                <div class="form-field">
+                    <label for="password_confirm">Confirm Password:</label>
+                    <input type="password" id="password_confirm" name="password_confirm">
+                </div>
 
                 <div id="passwordError" style="color: red; display: none; margin-bottom: 10px;"></div>
 
-                <button type="submit" class="btn-primary">Submit</button>
+                <div class="form-field">
+                    <button type="submit" class="btn-primary">Submit</button>
+                </div>
             </form>
             <div id="response"></div>
         </div>
