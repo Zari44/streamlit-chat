@@ -608,7 +608,7 @@ async def root(request: Request):
                         <div id="passwordError" class="fade-in"></div>
 
                         <div class="form-field fade-in">
-                            <button type="submit" class="button primary">Submit</button>
+                            <button type="submit" class="button primary">Create your Bot</button>
                         </div>
                     </form>
                     <div id="response" class="fade-in"></div>

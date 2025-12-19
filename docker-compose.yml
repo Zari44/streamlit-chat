@@ -27,7 +27,7 @@ services:
     environment:
       - STREAMLIT_URL=http://streamlit-chat:8501
     volumes:
-      - ./chat_sessions.db:/app/chat_sessions.db
+      - ./chat_sessions.db:/data/chat_sessions.db
       - ./backend:/app/backend
       - ./shared:/app/shared
       - ./pyproject.toml:/app/pyproject.toml
@@ -42,7 +42,7 @@ services:
       dockerfile: streamlit-chat/Dockerfile
     container_name: goatbot-streamlit
     volumes:
-      - ./chat_sessions.db:/app/chat_sessions.db
+      - ./chat_sessions.db:/data/chat_sessions.db
       - ./streamlit-chat:/app/streamlit-chat
       - ./shared:/app/shared
       - ./pyproject.toml:/app/pyproject.toml

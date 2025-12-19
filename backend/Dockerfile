@@ -6,6 +6,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 # Set working directory
 WORKDIR /app
 
+# Create data directory with proper permissions
+RUN mkdir -p /data && chmod 777 /data
+
 # Copy dependency files
 COPY uv.lock uv.lock
 COPY pyproject.toml pyproject.toml

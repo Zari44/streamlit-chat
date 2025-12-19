@@ -6,17 +6,20 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 # Set working directory
 WORKDIR /app
 
+# Create data directory with proper permissions
+RUN mkdir -p /data && chmod 777 /data
+
 # Copy dependency files
 COPY pyproject.toml uv.lock ./
+
+# Install dependencies
+RUN uv sync --frozen --no-dev
 
 # Copy shared directory (needed by streamlit-chat)
 COPY shared/ ./shared/
 
 # Copy streamlit-chat directory
 COPY streamlit-chat/ ./streamlit-chat/
-
-# Install dependencies
-RUN uv sync --frozen --no-dev
 
 # Expose port
 EXPOSE 8501
