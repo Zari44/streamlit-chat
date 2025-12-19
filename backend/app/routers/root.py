@@ -307,6 +307,15 @@ async def root(request: Request):
                 margin: 0 0 1em 0;
             }
 
+            .field-description {
+                color: rgba(255, 255, 255, 0.5);
+                font-size: 0.75em;
+                font-weight: 100;
+                margin: -0.75em 0 0.75em 0;
+                font-style: italic;
+                line-height: 1.5em;
+            }
+
             input[type="text"],
             input[type="password"],
             input[type="email"],
@@ -558,16 +567,19 @@ async def root(request: Request):
                     <form id="dataForm" class="fade-in">
                         <div class="form-field fade-in">
                             <label for="domain">Domain:</label>
+                            <div class="field-description">The web domain or URL where this bot will be deployed and accessible.</div>
                             <input type="text" id="domain" name="domain" required>
                         </div>
 
                         <div class="form-field fade-in">
                             <label for="title">Title:</label>
+                            <div class="field-description">A descriptive title or name for your bot that will be displayed to users.</div>
                             <input type="text" id="title" name="title" required>
                         </div>
 
                         <div class="form-field fade-in">
                             <label for="bot_audience">For whom the bot is addressed:</label>
+                            <div class="field-description">Describe the target audience or user group this bot is designed to serve (e.g., "customer service representatives", "students", "general public").</div>
                             <textarea id="bot_audience" name="bot_audience" required></textarea>
                         </div>
 
