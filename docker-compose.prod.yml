@@ -23,6 +23,7 @@ services:
     pull_policy: never
     container_name: goatbot-backend
     environment:
+      - DOMAIN_URL=goatbot.com.pl
       - STREAMLIT_URL=http://streamlit-chat:8501
     volumes:
       - ./chat_sessions.db:/data/chat_sessions.db
