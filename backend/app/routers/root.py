@@ -30,7 +30,7 @@ async def root(request: Request):
                 background: #1c1d26;
                 color: rgba(255, 255, 255, 0.75);
                 font-family: "Roboto", Helvetica, sans-serif;
-                font-size: 15pt;
+                font-size: 17pt;
                 font-weight: 100;
                 line-height: 1.75em;
             }
@@ -117,7 +117,7 @@ async def root(request: Request):
                 border: 0;
                 color: inherit;
                 display: inline-block;
-                font-size: 0.8em;
+                font-size: 0.9em;
                 font-weight: 300;
                 letter-spacing: 0.25em;
                 text-decoration: none;
@@ -266,7 +266,7 @@ async def root(request: Request):
 
             .user-email {
                 color: rgba(255, 255, 255, 0.5);
-                font-size: 0.9em;
+                font-size: 1em;
             }
 
             .login-prompt {
@@ -302,14 +302,14 @@ async def root(request: Request):
             label {
                 color: #ffffff;
                 display: block;
-                font-size: 0.9em;
+                font-size: 1em;
                 font-weight: 300;
                 margin: 0 0 1em 0;
             }
 
             .field-description {
                 color: rgba(255, 255, 255, 0.5);
-                font-size: 0.75em;
+                font-size: 0.85em;
                 font-weight: 100;
                 margin: -0.75em 0 0.75em 0;
                 font-style: italic;
@@ -396,7 +396,7 @@ async def root(request: Request):
                 color: #ffffff !important;
                 cursor: pointer;
                 display: inline-block;
-                font-size: 0.8em;
+                font-size: 0.9em;
                 font-weight: 300;
                 height: 3em;
                 letter-spacing: 0.25em;
@@ -441,7 +441,7 @@ async def root(request: Request):
             }
 
             h1 {
-                font-size: 2em;
+                font-size: 2.2em;
                 margin-bottom: 1.5em;
             }
 
@@ -496,7 +496,7 @@ async def root(request: Request):
             /* Responsive */
             @media screen and (max-width: 736px) {
                 body {
-                    font-size: 13pt;
+                    font-size: 15pt;
                 }
 
                 .container {
@@ -527,7 +527,7 @@ async def root(request: Request):
                 }
 
                 #nav ul li a {
-                    font-size: 0.7em;
+                    font-size: 0.8em;
                 }
 
                 .auth-info {
@@ -567,7 +567,7 @@ async def root(request: Request):
                     <form id="dataForm" class="fade-in">
                         <div class="form-field fade-in">
                             <label for="domain">Domain:</label>
-                            <div class="field-description">The web domain or URL where this bot will be deployed and accessible.</div>
+                            <div class="field-description">The subdomain where your bot will be deployed and accessible e.g. youtbot.goatbot.io</div>
                             <input type="text" id="domain" name="domain" required>
                         </div>
 
@@ -579,7 +579,7 @@ async def root(request: Request):
 
                         <div class="form-field fade-in">
                             <label for="bot_audience">For whom the bot is addressed:</label>
-                            <div class="field-description">Describe the target audience or user group this bot is designed to serve (e.g., "customer service representatives", "students", "general public").</div>
+                            <div class="field-description">Describe the target audience or user group this bot is designed to serve (e.g., the name of your friend, close ones etc"</div>
                             <textarea id="bot_audience" name="bot_audience" required></textarea>
                         </div>
 
@@ -589,14 +589,16 @@ async def root(request: Request):
                         </div>
 
                         <div class="form-field fade-in">
-                            <label for="bot_tone">What words should it use and what should be it's general tone:</label>
+                            <label for="bot_tone">What should be bot's general tone:</label>
                             <textarea id="bot_tone" name="bot_tone" required></textarea>
                         </div>
 
                         <div class="form-field fade-in">
                             <label for="password">Password:</label>
+                            <div class="field-description">Password to guard access to the bot</div>
                             <input type="password" id="password" name="password">
                         </div>
+
 
                         <div class="form-field fade-in">
                             <label for="password_confirm">Confirm Password:</label>
