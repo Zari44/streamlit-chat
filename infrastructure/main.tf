@@ -155,3 +155,33 @@ resource "aws_eip" "goatbot_eip" {
     Name = "${var.project_name}-eip"
   }
 }
+
+# Route 53 Hosted Zone (only if domain_name is provided and create_dns_records is true)
+resource "aws_route53_zone" "goatbot_zone" {
+  count = var.domain_name != "" && var.create_dns_records ? 1 : 0
+  name  = var.domain_name
+
+  tags = {
+    Name = "${var.project_name}-zone"
+  }
+}
+
+# Route 53 A record pointing to Elastic IP
+resource "aws_route53_record" "goatbot_a_record" {
+  count   = var.domain_name != "" && var.create_dns_records && var.allocate_elastic_ip ? 1 : 0
+  zone_id = aws_route53_zone.goatbot_zone[0].zone_id
+  name    = var.domain_name
+  type    = "A"
+  ttl     = 300
+  records = [aws_eip.goatbot_eip[0].public_ip]
+}
+
+# Route 53 A record for www subdomain (optional)
+resource "aws_route53_record" "goatbot_www_record" {
+  count   = var.domain_name != "" && var.create_dns_records && var.allocate_elastic_ip && var.create_www_record ? 1 : 0
+  zone_id = aws_route53_zone.goatbot_zone[0].zone_id
+  name    = "www.${var.domain_name}"
+  type    = "A"
+  ttl     = 300
+  records = [aws_eip.goatbot_eip[0].public_ip]
+}

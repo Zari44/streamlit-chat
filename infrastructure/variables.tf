@@ -44,3 +44,15 @@ variable "domain_name" {
   type        = string
   default     = ""
 }
+
+variable "create_dns_records" {
+  description = "Whether to create Route 53 DNS records for the domain (requires domain_name to be set)"
+  type        = bool
+  default     = false
+}
+
+variable "create_www_record" {
+  description = "Whether to create a www subdomain A record"
+  type        = bool
+  default     = true
+}

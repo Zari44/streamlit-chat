@@ -66,7 +66,9 @@ Edit `terraform.tfvars` to customize:
 - `volume_size`: Root volume size in GB (default: 20)
 - `ssh_allowed_cidrs`: CIDR blocks for SSH access (default: 0.0.0.0/0 - restrict this!)
 - `allocate_elastic_ip`: Allocate static IP (default: true)
-- `domain_name`: Domain name for Caddy (optional)
+- `domain_name`: Domain name for Caddy and DNS (e.g., "goatbot.com.pl")
+- `create_dns_records`: Create Route 53 DNS records (default: false)
+- `create_www_record`: Create www subdomain record (default: true)
 
 ## Security Recommendations
 
@@ -134,10 +136,60 @@ Approximate monthly costs (us-east-1):
 
 **Total estimated**: ~$32-35/month for basic setup
 
+## DNS Configuration with Route 53
+
+To set up DNS for your domain (e.g., `goatbot.com.pl`):
+
+### Option 1: Using Terraform (Recommended)
+
+1. **Update `terraform.tfvars`**:
+   ```hcl
+   domain_name = "goatbot.com.pl"
+   create_dns_records = true
+   create_www_record = true
+   ```
+
+2. **Apply Terraform configuration**:
+   ```bash
+   terraform apply
+   ```
+
+3. **Get the name servers**:
+   ```bash
+   terraform output route53_name_servers
+   ```
+
+4. **Update your domain registrar**:
+   - Go to your domain registrar (where you purchased `goatbot.com.pl`)
+   - Update the domain's name servers to the ones shown in the Terraform output
+   - This typically takes 24-48 hours to propagate globally
+
+### Option 2: Manual DNS Configuration
+
+If you prefer to manage DNS at your domain registrar:
+
+1. **Get your Elastic IP**:
+   ```bash
+   terraform output elastic_ip
+   ```
+
+2. **Create DNS records at your registrar**:
+   - Create an **A record** for `goatbot.com.pl` pointing to the Elastic IP
+   - Optionally create a **CNAME record** for `www.goatbot.com.pl` pointing to `goatbot.com.pl`
+
+3. **Set `create_dns_records = false`** in `terraform.tfvars` to prevent Terraform from managing DNS
+
+### After DNS Setup
+
+Once DNS is configured and propagated:
+- Caddy will automatically obtain SSL certificates via Let's Encrypt
+- Your application will be accessible at `https://goatbot.com.pl`
+- The `Caddyfile.prod` is already configured for the domain
+
 ## Next Steps
 
-1. Set up a domain name and configure DNS
-2. Configure Caddy with your domain in the Caddyfile
+1. ✅ Set up a domain name and configure DNS (see above)
+2. ✅ Configure Caddy with your domain in the Caddyfile (already done)
 3. Set up automated backups for the database
 4. Consider using AWS RDS for the database instead of SQLite
 5. Set up CloudWatch monitoring and alarms
