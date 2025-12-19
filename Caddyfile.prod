@@ -1,0 +1,41 @@
+# Production Caddyfile for GoatBot
+#
+# Option 1: For IP-based access (default - works with any IP)
+# This configuration will work with your EC2 instance's IP address
+:80 {
+    # Handle API routes
+    handle /api/* {
+        reverse_proxy backend:8000
+    }
+
+    # Default route
+    handle {
+        reverse_proxy backend:8000
+    }
+}
+
+# Option 2: For domain-based access with SSL (uncomment and configure)
+# Replace YOUR_DOMAIN with your actual domain (e.g., goatbot.example.com)
+# Make sure your domain DNS points to your EC2 instance's IP
+#
+# YOUR_DOMAIN {
+#     # Handle API routes
+#     handle /api/* {
+#         reverse_proxy backend:8000
+#     }
+#
+#     # Handle chat subdomains (e.g., chat.YOUR_DOMAIN)
+#     handle *.YOUR_DOMAIN {
+#         reverse_proxy streamlit-chat:8501 {
+#             header_up X-Chat-Domain {labels.2}
+#         }
+#     }
+#
+#     # Default route
+#     handle {
+#         reverse_proxy backend:8000
+#     }
+# }
+#
+# Note: Caddy will automatically obtain SSL certificates via Let's Encrypt
+# when using a domain name. For IP-based access, only HTTP (port 80) is available.

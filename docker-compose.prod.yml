@@ -1,0 +1,51 @@
+services:
+  caddy:
+    image: caddy:latest
+    container_name: goatbot-caddy
+    pull_policy: if_not_present
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    command: caddy run --config /etc/caddy/Caddyfile --watch
+    networks:
+      - goatbot-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - streamlit-chat
+
+  backend:
+    image: goatbot-backend:latest
+    pull_policy: never
+    container_name: goatbot-backend
+    environment:
+      - STREAMLIT_URL=http://streamlit-chat:8501
+    volumes:
+      - ./chat_sessions.db:/data/chat_sessions.db
+    networks:
+      - goatbot-network
+    restart: unless-stopped
+
+  streamlit-chat:
+    image: goatbot-streamlit:latest
+    pull_policy: never
+    container_name: goatbot-streamlit
+    volumes:
+      - ./chat_sessions.db:/data/chat_sessions.db
+    networks:
+      - goatbot-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+networks:
+  goatbot-network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
