@@ -20,24 +20,26 @@ logger.info("=== config.py: Starting module initialization ===")
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from backend.app.models.chat_config import ChatConfig
+from shared.chat_config import ChatConfig
 from shared.db import get_session  # type: ignore
 
 load_dotenv()
 
-TITLE = os.getenv("TITLE", "title")
-SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT", "You are a helpful assistant.")
-PASSWORD = os.getenv("PASSWORD", "password")
+TITLE = os.getenv("TITLE", "G.O.A.T. Bot")
+PASSWORD = os.getenv("PASSWORD", "pass")
 
 
 def get_config(domain: str | None) -> ChatConfig:
     if not domain:
-        config = {
-            "title": os.getenv("TITLE", TITLE),
-            "system_prompt": SYSTEM_PROMPT,
-            "password": PASSWORD,
-        }
-        return config
+        return ChatConfig(
+            domain="",
+            title=TITLE,
+            bot_aim="To help user. To make him happy and help him with his problems.",
+            password=PASSWORD,
+            user=None,
+            bot_audience="General audience",
+            bot_tone="Playful, funny and friendly!",
+        )
 
     loaded_config = get_session(domain)
     if loaded_config:

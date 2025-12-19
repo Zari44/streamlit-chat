@@ -1,8 +1,8 @@
 import os
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
-from backend.app.models.chat_config import ChatConfig
+from shared.chat_config import ChatConfig
 from shared.db import create_session
 
 router = APIRouter()
@@ -15,5 +15,8 @@ DOMAIN_URL = os.getenv("DOMAIN_URL", "goatbot.localhost")
 
 @router.post("/start")
 def start_chat(config: ChatConfig):
-    domain = create_session(config.model_dump())
-    return {"message": "New chatbot created", "redirect_url": f"http://{domain}.{DOMAIN_URL}"}
+    try:
+        domain = create_session(config)
+        return {"message": "New chatbot created", "redirect_url": f"http://{domain}.{DOMAIN_URL}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to create bot") from e

@@ -7,7 +7,7 @@ from openai import OpenAI
 from password import check_password
 from prompt import get_system_prompt
 
-from backend.app.models.chat_config import ChatConfig
+from shared.chat_config import ChatConfig
 
 # Configure logging
 load_dotenv()
