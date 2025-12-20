@@ -8,16 +8,16 @@ goatbot.com.pl {
         reverse_proxy backend:8000
     }
 
-    # Handle chat subdomains (e.g., chat.goatbot.com.pl)
-    handle *.goatbot.com.pl {
-        reverse_proxy streamlit-chat:8501 {
-            header_up X-Chat-Domain {labels.2}
-        }
-    }
-
     # Default route
     handle {
         reverse_proxy backend:8000
+    }
+}
+
+# Handle chat subdomains (e.g., chat.goatbot.com.pl)
+*.goatbot.com.pl {
+    reverse_proxy streamlit-chat:8501 {
+        header_up X-Chat-Domain {labels.2}
     }
 }
 

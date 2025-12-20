@@ -71,7 +71,7 @@ fi
 # Copy production docker-compose file
 if [ -f "$PROJECT_ROOT/docker-compose.prod.yml" ]; then
     echo -e "${YELLOW}Copying docker-compose.prod.yml...${NC}"
-    scp -i "$KEY_FILE" -o StrictHostKeyChecking=no "$PROJECT_ROOT/docker-compose.prod.yml" ec2-user@$INSTANCE_IP:/opt/goatbot/docker-compose.prod.yml
+    scp -i "$KEY_FILE" -o StrictHostKeyChecking=no "$PROJECT_ROOT/docker-compose.prod.yml" ec2-user@$INSTANCE_IP:/opt/goatbot/docker-compose.yml
     echo -e "${GREEN}✓ docker-compose.prod.yml copied${NC}"
 else
     echo -e "${YELLOW}Warning: docker-compose.prod.yml not found, skipping...${NC}"

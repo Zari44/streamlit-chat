@@ -22,9 +22,8 @@ services:
     image: goatbot-backend:latest
     pull_policy: never
     container_name: goatbot-backend
-    environment:
-      - DOMAIN_URL=goatbot.com.pl
-      - STREAMLIT_URL=http://streamlit-chat:8501
+    env_file:
+      - .env.backend
     volumes:
       - ./chat_sessions.db:/data/chat_sessions.db
     networks:
@@ -35,6 +34,8 @@ services:
     image: goatbot-streamlit:latest
     pull_policy: never
     container_name: goatbot-streamlit
+    env_file:
+      - .env.chat
     volumes:
       - ./chat_sessions.db:/data/chat_sessions.db
     networks:
