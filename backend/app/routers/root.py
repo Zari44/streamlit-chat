@@ -589,18 +589,18 @@ async def root(request: Request):
                         </div>
 
                         <div class="form-field fade-in">
-                            <label for="bot_audience">For whom the bot is addressed:</label>
-                            <div class="field-description">Describe the target audience or user group this bot is designed to serve (e.g., the name of your friend, close ones etc"</div>
+                            <label for="bot_audience">Who is the bot for:</label>
+                            <div class="field-description">Describe the target person/audience or user group this bot is designed for. The more details you give about the person - the better :)"</div>
                             <textarea id="bot_audience" name="bot_audience" required></textarea>
                         </div>
 
                         <div class="form-field fade-in">
-                            <label for="bot_aim">What is bot's aim / What should it do:</label>
+                            <label for="bot_aim">What should it do (encourage, motivate, support, etc.). The more details you give - the better :)"</label>
                             <textarea id="bot_aim" name="bot_aim" required></textarea>
                         </div>
 
                         <div class="form-field fade-in">
-                            <label for="bot_tone">What should be bot's general tone:</label>
+                            <label for="bot_tone">What should be bot's general tone (e.g. friendly, professional, etc.):</label>
                             <textarea id="bot_tone" name="bot_tone" required></textarea>
                         </div>
 
