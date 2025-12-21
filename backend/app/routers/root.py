@@ -477,6 +477,16 @@ async def root(request: Request):
                 border: 1px solid rgba(244, 67, 54, 0.3);
             }
 
+            #domainError {
+                color: #f44336;
+                display: none;
+                margin-bottom: 1em;
+                padding: 0.5em;
+                background-color: rgba(244, 67, 54, 0.1);
+                border-radius: 4px;
+                border: 1px solid rgba(244, 67, 54, 0.3);
+            }
+
             /* Scroll Progress Indicator */
             #scroll-progress {
                 position: fixed;
@@ -569,6 +579,7 @@ async def root(request: Request):
                             <label for="domain">Domain:</label>
                             <div class="field-description">The subdomain where your bot will be deployed and accessible e.g. youtbot.goatbot.io</div>
                             <input type="text" id="domain" name="domain" required>
+                            <div id="domainError" class="fade-in"></div>
                         </div>
 
                         <div class="form-field fade-in">
@@ -778,13 +789,59 @@ async def root(request: Request):
             // Check auth status on page load
             checkAuth();
 
+            // Domain validation function
+            function validateDomain(domain) {
+                if (!domain) {
+                    return 'Domain is required';
+                }
+                if (domain.length > 128) {
+                    return 'Domain cannot be longer than 128 characters';
+                }
+                if (!/^[a-z]+$/.test(domain)) {
+                    return 'Domain can only contain lowercase letters from a-z (latin alphabet)';
+                }
+                return null;
+            }
+
+            // Real-time domain validation on input
+            document.addEventListener('DOMContentLoaded', function() {
+                const domainInput = document.getElementById('domain');
+                const domainError = document.getElementById('domainError');
+
+                if (domainInput && domainError) {
+                    domainInput.addEventListener('input', function() {
+                        const domain = this.value;
+                        const error = validateDomain(domain);
+                        if (error) {
+                            domainError.textContent = error;
+                            domainError.style.display = 'block';
+                        } else {
+                            domainError.style.display = 'none';
+                        }
+                    });
+                }
+            });
+
             // Form submission handler
             document.getElementById('dataForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
+                const domain = document.getElementById('domain').value;
+                const domainError = document.getElementById('domainError');
                 const password = document.getElementById('password').value;
                 const passwordConfirm = document.getElementById('password_confirm').value;
                 const passwordError = document.getElementById('passwordError');
+
+                // Validate domain
+                const domainValidationError = validateDomain(domain);
+                if (domainValidationError) {
+                    domainError.textContent = domainValidationError;
+                    domainError.style.display = 'block';
+                    return;
+                }
+
+                // Clear domain error if valid
+                domainError.style.display = 'none';
 
                 // Check if passwords match (only if password is provided)
                 if (password && password !== passwordConfirm) {
