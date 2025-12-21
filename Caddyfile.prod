@@ -2,6 +2,8 @@
 #
 # Domain-based access with SSL (automatically configured for goatbot.com.pl)
 # Caddy will automatically obtain SSL certificates via Let's Encrypt
+# Wildcard certificates require DNS-01 challenge with Route 53
+
 goatbot.com.pl {
     # Handle API routes
     handle /api/* {
@@ -15,9 +17,18 @@ goatbot.com.pl {
 }
 
 # Handle chat subdomains (e.g., chat.goatbot.com.pl)
+# Wildcard requires DNS-01 challenge (configured via tls directive)
 *.goatbot.com.pl {
+    tls {
+        dns route53 {
+            access_key_id {env.AWS_ACCESS_KEY_ID}
+            secret_access_key {env.AWS_SECRET_ACCESS_KEY}
+            # Optional: specify AWS region (defaults to us-east-1)
+            # region {env.AWS_REGION}
+        }
+    }
     reverse_proxy streamlit-chat:8501 {
-        header_up X-Chat-Domain {labels.2}
+        header_up X-Chat-Domain {labels.3}
     }
 }
 

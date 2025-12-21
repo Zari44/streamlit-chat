@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to build and push the streamlit-chat Docker image to the remote instance
+# Script to build and push the Caddy Docker image to the remote instance
 
 set -e
 
@@ -53,7 +53,7 @@ fi
 # Set correct permissions on key file
 chmod 400 "$KEY_FILE" 2>/dev/null || true
 
-echo -e "${GREEN}Building and pushing streamlit-chat Docker image to instance: $INSTANCE_IP${NC}"
+echo -e "${GREEN}Building and pushing Caddy Docker image to instance: $INSTANCE_IP${NC}"
 echo -e "${GREEN}Using key file: $KEY_FILE${NC}"
 echo ""
 
@@ -62,30 +62,36 @@ PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_ROOT"
 
 # Image name
-STREAMLIT_IMAGE="goatbot-streamlit"
+CADDY_IMAGE="goatbot-caddy"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 # Temporary directory for tar files
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf ${TEMP_DIR}' EXIT
 
-echo -e "${BLUE}Step 1: Building streamlit-chat Docker image...${NC}"
+echo -e "${BLUE}Step 1: Building Caddy Docker image...${NC}"
 echo ""
 
-echo -e "${YELLOW}Building streamlit-chat image...${NC}"
-docker build -t "$STREAMLIT_IMAGE:$TIMESTAMP" -f streamlit-chat/Dockerfile .
-docker tag "$STREAMLIT_IMAGE:$TIMESTAMP" "$STREAMLIT_IMAGE:latest"
-echo -e "${GREEN}✓ Streamlit-chat image built successfully${NC}"
+# Check if Dockerfile exists
+if [ ! -f "$PROJECT_ROOT/caddy/Dockerfile" ]; then
+    echo -e "${RED}Error: caddy/Dockerfile not found${NC}"
+    exit 1
+fi
+
+echo -e "${YELLOW}Building Caddy image with Route 53 DNS plugin...${NC}"
+docker build -t "$CADDY_IMAGE:$TIMESTAMP" -f caddy/Dockerfile .
+docker tag "$CADDY_IMAGE:$TIMESTAMP" "$CADDY_IMAGE:latest"
+echo -e "${GREEN}✓ Caddy image built successfully${NC}"
 
 echo ""
 echo -e "${BLUE}Step 2: Saving Docker image to tar file...${NC}"
 
 # Save image to tar file
-STREAMLIT_TAR="$TEMP_DIR/${STREAMLIT_IMAGE}.tar"
+CADDY_TAR="$TEMP_DIR/${CADDY_IMAGE}.tar"
 
-echo -e "${YELLOW}Saving streamlit-chat image...${NC}"
-docker save "$STREAMLIT_IMAGE:latest" -o "$STREAMLIT_TAR"
-echo -e "${GREEN}✓ Streamlit-chat image saved${NC}"
+echo -e "${YELLOW}Saving Caddy image...${NC}"
+docker save "$CADDY_IMAGE:latest" -o "$CADDY_TAR"
+echo -e "${GREEN}✓ Caddy image saved${NC}"
 
 echo ""
 echo -e "${BLUE}Step 3: Transferring image to remote instance...${NC}"
@@ -94,22 +100,22 @@ echo -e "${BLUE}Step 3: Transferring image to remote instance...${NC}"
 ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no ec2-user@$INSTANCE_IP "mkdir -p /tmp/goatbot-images" || true
 
 # Transfer tar file
-echo -e "${YELLOW}Transferring streamlit-chat image...${NC}"
-scp -i "$KEY_FILE" -o StrictHostKeyChecking=no "${STREAMLIT_TAR}" ec2-user@$INSTANCE_IP:/tmp/goatbot-images/
-echo -e "${GREEN}✓ Streamlit-chat image transferred${NC}"
+echo -e "${YELLOW}Transferring Caddy image...${NC}"
+scp -i "$KEY_FILE" -o StrictHostKeyChecking=no "$CADDY_TAR" ec2-user@$INSTANCE_IP:/tmp/goatbot-images/
+echo -e "${GREEN}✓ Caddy image transferred${NC}"
 
 echo ""
 echo -e "${BLUE}Step 4: Loading image on remote instance...${NC}"
 
 # Load image on remote instance
 ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no ec2-user@$INSTANCE_IP << 'EOF'
-    echo "Loading streamlit-chat image..."
-    docker load -i /tmp/goatbot-images/${STREAMLIT_IMAGE}.tar
+    echo "Loading Caddy image..."
+    docker load -i /tmp/goatbot-images/${CADDY_IMAGE}.tar
     echo "Cleaning up tar file..."
-    rm -f /tmp/goatbot-images/${STREAMLIT_IMAGE}.tar
-    echo "Streamlit-chat image loaded successfully!"
+    rm -f /tmp/goatbot-images/${CADDY_IMAGE}.tar
+    echo "Caddy image loaded successfully!"
 EOF
 
 echo ""
-echo -e "${GREEN}✓ Streamlit-chat Docker image built and pushed successfully!${NC}"
+echo -e "${GREEN}✓ Caddy Docker image built and pushed successfully!${NC}"
 echo ""

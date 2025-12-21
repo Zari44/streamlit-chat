@@ -1,8 +1,11 @@
 services:
   caddy:
-    image: caddy:latest
+    build:
+      context: .
+      dockerfile: caddy/Dockerfile
+    image: goatbot-caddy:latest
     container_name: goatbot-caddy
-    pull_policy: if_not_present
+    pull_policy: never
     ports:
       - "80:80"
       - "443:443"
@@ -10,6 +13,8 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
+    env_file:
+      - .env.caddy
     command: caddy run --config /etc/caddy/Caddyfile --watch
     networks:
       - goatbot-network

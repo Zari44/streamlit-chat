@@ -67,7 +67,7 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 # Temporary directory for tar files
 TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
+trap 'rm -rf ${TEMP_DIR}' EXIT
 
 echo -e "${BLUE}Step 1: Building backend Docker image...${NC}"
 echo ""
@@ -102,7 +102,7 @@ echo ""
 echo -e "${BLUE}Step 4: Loading image on remote instance...${NC}"
 
 # Load image on remote instance
-ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no ec2-user@$INSTANCE_IP << EOF
+ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no ec2-user@$INSTANCE_IP << 'EOF'
     echo "Loading backend image..."
     docker load -i /tmp/goatbot-images/${BACKEND_IMAGE}.tar
     echo "Cleaning up tar file..."
