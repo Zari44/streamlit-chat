@@ -22,6 +22,7 @@ config: ChatConfig = get_config(domain)
 
 client = OpenAI()
 
+st.set_page_config(page_title=config.title)
 st.title(config.title)
 
 if not check_password(config.password):
