@@ -109,6 +109,7 @@ echo -e "${BLUE}Step 4: Loading image on remote instance...${NC}"
 
 # Load image on remote instance
 ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no ec2-user@$INSTANCE_IP << 'EOF'
+    export CADDY_IMAGE="goatbot-caddy"
     echo "Loading Caddy image..."
     docker load -i /tmp/goatbot-images/${CADDY_IMAGE}.tar
     echo "Cleaning up tar file..."

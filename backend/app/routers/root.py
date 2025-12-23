@@ -1,3 +1,11 @@
+"""
+GoatBot Service
+
+A service that allows users to create personalized bots to cheer up a single person.
+The aim is to provide fun, warmth, and pleasure through personalized interactions.
+The more details you provide about the person - the better experience you will get :)
+"""
+
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
@@ -573,6 +581,12 @@ async def root(request: Request):
                     <header class="major fade-in">
                         <h1>GoatBot Form</h1>
                     </header>
+
+                    <div class="service-description fade-in" style="margin-bottom: 3em; padding: 2em; background: rgba(228, 76, 101, 0.05); border-radius: 8px; border: 1px solid rgba(228, 76, 101, 0.2);">
+                        <p style="margin: 0; line-height: 1.75em; color: rgba(255, 255, 255, 0.85); font-size: 1.1em;">
+                            Create a personalized bot to cheer up someone special. Our aim is to provide <strong style="color: #e44c65;">fun, warmth, and pleasure</strong> through personalized interactions. The more details you provide about the person - the better experience you will get :)
+                        </p>
+                    </div>
 
                     <form id="dataForm" class="fade-in">
                         <div class="form-field fade-in">

@@ -103,6 +103,7 @@ echo -e "${BLUE}Step 4: Loading image on remote instance...${NC}"
 
 # Load image on remote instance
 ssh -i "$KEY_FILE" -o StrictHostKeyChecking=no ec2-user@$INSTANCE_IP << 'EOF'
+    export BACKEND_IMAGE="goatbot-backend"
     echo "Loading backend image..."
     docker load -i /tmp/goatbot-images/${BACKEND_IMAGE}.tar
     echo "Cleaning up tar file..."

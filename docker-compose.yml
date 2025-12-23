@@ -53,6 +53,17 @@ services:
     depends_on:
       - backend
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: goatbot-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - goatbot-network
+    restart: unless-stopped
+
 networks:
   goatbot-network:
     driver: bridge
@@ -60,3 +71,4 @@ networks:
 volumes:
   caddy_data:
   caddy_config:
+  grafana_data:
