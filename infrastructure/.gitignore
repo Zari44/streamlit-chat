@@ -4,12 +4,19 @@
 *.tfvars
 !terraform.tfvars.example
 .terraform/
-.terraform.lock.hcl
 crash.log
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+
+# Saved plans (binary / local)
+*.tfplan
+
+# Local env / secrets (use *.example templates)
+.env
+.env.*
+!.env.*.example
 
 # Sensitive files
 *.pem
